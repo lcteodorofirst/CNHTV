@@ -1,6 +1,6 @@
 # CNH TV
 
-Versão 1.1.2.
+Versão 1.0.0.
 
 Plataforma para gerenciamento e monitoramento de páginas exibidas em TVs LG webOS.
 

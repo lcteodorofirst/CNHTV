@@ -1,0 +1,52 @@
+<page-header [title]="'tv.list-title' | translate">
+  <button class="secondary-icon" mat-icon-button aria-label="Atualizar" (click)="load()">
+    <mat-icon>refresh</mat-icon>
+  </button>
+</page-header>
+
+<app-table
+  [items]="devices"
+  [loading]="loading"
+  [totalItems]="totalItems"
+  [pageSize]="pageSize"
+  [pageChange]="onPageChange"
+  [headers]="displayedColumns">
+  <ng-container matColumnDef="Status">
+    <th *matHeaderCellDef mat-header-cell>STATUS</th>
+    <td *matCellDef="let row" mat-cell>
+      <span class="status" [class.online]="row.IsOnline" [class.offline]="!row.IsOnline">
+        <span class="status-dot"></span>{{ row.IsOnline ? 'Online' : 'Offline' }}
+      </span>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="Name">
+    <th *matHeaderCellDef mat-header-cell>NOME</th>
+    <td *matCellDef="let row" mat-cell>
+      <strong>{{ row.Name }}</strong>
+      <small>{{ row.DeviceKey }}</small>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="Model">
+    <th *matHeaderCellDef mat-header-cell>MODELO / WEBOS</th>
+    <td *matCellDef="let row" mat-cell>{{ row.Model || 'Não informado' }}<small>{{ row.WebOsVersion || '-' }}</small></td>
+  </ng-container>
+  <ng-container matColumnDef="IpAddress">
+    <th *matHeaderCellDef mat-header-cell>IP</th>
+    <td *matCellDef="let row" mat-cell>{{ row.IpAddress || '-' }}</td>
+  </ng-container>
+  <ng-container matColumnDef="PresentationUrl">
+    <th *matHeaderCellDef mat-header-cell>PÁGINA</th>
+    <td *matCellDef="let row" mat-cell class="url-cell" [title]="row.PresentationUrl">{{ row.PresentationUrl }}</td>
+  </ng-container>
+  <ng-container matColumnDef="LastSeenAtUtc">
+    <th *matHeaderCellDef mat-header-cell>ÚLTIMO CONTATO</th>
+    <td *matCellDef="let row" mat-cell>{{ row.LastSeenAtUtc | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+  </ng-container>
+  <ng-container matColumnDef="actions">
+    <th *matHeaderCellDef mat-header-cell>AÇÕES</th>
+    <td *matCellDef="let row" mat-cell>
+      <button mat-icon-button class="secondary-icon" title="Histórico" (click)="openHistory(row)"><mat-icon>history</mat-icon></button>
+      <button mat-icon-button class="blue-icon" title="Configurar" (click)="openConfiguration(row)"><mat-icon>settings</mat-icon></button>
+    </td>
+  </ng-container>
+</app-table>

@@ -1,0 +1,7 @@
+:host { display: flex; flex-direction: column; height: 100%; min-height: 0; }
+small { display: block; color: #666; margin-top: .2rem; }
+.status { display: inline-flex; align-items: center; gap: .45rem; font-weight: 600; }
+.status-dot { width: .65rem; height: .65rem; border-radius: 50%; display: inline-block; }
+.online { color: var(--green); .status-dot { background: var(--green); box-shadow: 0 0 0 3px rgba(46,125,50,.12); } }
+.offline { color: #767676; .status-dot { background: #888; } }
+.url-cell { max-width: 20rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

@@ -1,0 +1,46 @@
+@page
+@model Cnhtv.Pages.IndexModel
+@{
+    ViewData["Title"] = "Cnhtv API page";
+    var applicationName = "Cnhtv";
+}
+
+<div class="container">
+    <main role="main" class="pb-3">
+
+        <div class="jumbotron" style="background-color: #2f2f2f">
+            <h1 class="display-4">@applicationName</h1>
+            <p class="lead">CNH Api</p>
+            <hr class="my-4" style="background-color: white">
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <p class="lead" style="color: black !important">API Extras</p>
+            </div>
+
+            <div class="col-sm-4 mb-4">
+                <div class="card shadow-sm h-100 card-item m-0">
+                    <div class="card-body">
+                        <h5 class="card-title">Saúde da API</h5>
+                    </div>
+                    <div class="card-footer text-right bg-transparent">
+                        <a href="/healthz" target="_blank" class="btn btn-primary">Abrir</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-4 mb-4">
+                <div class="card shadow-sm h-100 card-item m-0">
+                    <div class="card-body">
+                        <h5 class="card-title">OData metadata</h5>
+                    </div>
+                    <div class="card-footer text-right bg-transparent">
+                        <a href="/odata" target="_blank" class="btn btn-primary">Abrir</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>

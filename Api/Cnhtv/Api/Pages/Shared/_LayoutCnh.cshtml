@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"]</title>
+
+    <link rel="icon" type="image/x-icon" href="~/favicon.ico" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/cnh/cnh.css" />
+</head>
+<body>
+    <header>
+        <div id="supergraphic-header" style="background-color: #000000"></div>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3" style="background-color: #000000 !important; height: 3.8rem;">
+            <div class="container">
+                <a asp-area="" asp-page="/Index">
+                    <div class="sh-header-cnh">
+                        <img class="cnh-logo" alt="Cnh logo" src="~/cnh.png" asp-append-version="true" style="height: 100%; padding-top: 1rem; margin-left: -2rem; margin-top: -1.9rem;/>
+                    </div>
+                </a>
+                <a class="navbar-brand">&nbsp;</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <partial name="_CookieConsentPartial" />
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container" style="white-space: normal;">
+            Copyright © CNH - Todos os direitos reservados - &copy; @DateTime.UtcNow.Year - Powered by IT Manufactury
+        </div>
+    </footer>
+
+    <script type="text/javascript" src="~/lib/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

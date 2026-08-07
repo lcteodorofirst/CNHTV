@@ -1,0 +1,4 @@
+table { width: 100%; }
+.loading { min-height: 12rem; display: grid; place-items: center; }
+.online { color: var(--green); font-weight: 600; }
+.empty { text-align: center; color: #666; padding: 3rem; }

@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>CNH TV</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main id="connectionScreen" class="connection-screen" aria-live="polite">
+    <div class="connection-card">
+      <img class="brand" src="assets/cnh.png" alt="CNH">
+      <h1>CNH TV</h1>
+      <p id="connectionMessage">Conectando ao servidor...</p>
+      <div class="loader"><span></span><span></span><span></span></div>
+      <small id="deviceIdentifier"></small>
+    </div>
+  </main>
+  <iframe id="presentationFrame" title="Apresentação configurada" allow="autoplay; fullscreen"></iframe>
+  <div id="connectionWarning" class="connection-warning">Servidor temporariamente indisponível</div>
+  <button id="settingsButton" class="settings-button" type="button" aria-label="Abrir configurações" title="Configurações (botão vermelho)">
+    <span class="settings-icon" aria-hidden="true">⚙</span>
+    <span class="settings-button-label">Configurações</span>
+  </button>
+
+  <section id="settingsDialog" class="settings-dialog" aria-hidden="true" aria-labelledby="settingsTitle">
+    <form id="settingsForm" class="settings-panel">
+      <header class="settings-header">
+        <div>
+          <span class="settings-eyebrow">CNH TV</span>
+          <h2 id="settingsTitle">Configurações</h2>
+        </div>
+        <span class="settings-version">Versão 1.0.0</span>
+      </header>
+
+      <div class="settings-content">
+        <label class="switch-row" for="integrationEnabled">
+          <span>
+            <strong>Integração com o servidor CNH TV</strong>
+            <small>Quando habilitada, a página e o refresh são controlados pelo servidor.</small>
+          </span>
+          <span class="switch-control">
+            <input id="integrationEnabled" type="checkbox">
+            <span class="switch-slider"></span>
+          </span>
+        </label>
+
+        <label class="field" for="apiBaseUrl">
+          <span>Endereço do serviço</span>
+          <input id="apiBaseUrl" type="url" inputmode="url" autocomplete="off" spellcheck="false">
+          <small>Padrão: https://itm.curitiba.cnh.com:7001/cnhtv/api</small>
+        </label>
+
+        <div id="localSettingsPanel" class="local-settings">
+          <h3>Apresentação configurada localmente</h3>
+          <p>Disponível somente quando a integração com o servidor estiver desabilitada.</p>
+
+          <label class="field" for="localPresentationUrl">
+            <span>Endereço da página para apresentação</span>
+            <input id="localPresentationUrl" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://exemplo.com/pagina">
+          </label>
+
+          <div class="refresh-row">
+            <label class="check-row" for="localRefreshEnabled">
+              <input id="localRefreshEnabled" type="checkbox">
+              <span>Ativar atualização automática</span>
+            </label>
+            <label class="field compact-field" for="localRefreshMinutes">
+              <span>Intervalo (minutos)</span>
+              <input id="localRefreshMinutes" type="number" min="1" step="1">
+            </label>
+          </div>
+        </div>
+
+        <p id="settingsError" class="settings-error" role="alert"></p>
+      </div>
+
+      <footer class="settings-actions">
+        <button id="resetSettingsButton" class="button button-secondary" type="button">Restaurar padrão</button>
+        <span class="settings-spacer"></span>
+        <button id="cancelSettingsButton" class="button button-secondary" type="button">Cancelar</button>
+        <button class="button button-primary" type="submit">Salvar e aplicar</button>
+      </footer>
+    </form>
+  </section>
+  <script src="app.js"></script>
+</body>
+</html>

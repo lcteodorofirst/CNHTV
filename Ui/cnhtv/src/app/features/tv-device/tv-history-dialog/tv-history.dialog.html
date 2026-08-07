@@ -1,0 +1,17 @@
+<h2 mat-dialog-title>Histórico de conexão — {{ device.Name }}</h2>
+<mat-dialog-content>
+  @if (loading) {
+    <div class="loading"><mat-spinner diameter="36"></mat-spinner></div>
+  } @else {
+    <table mat-table [dataSource]="history">
+      <ng-container matColumnDef="ConnectedAtUtc"><th *matHeaderCellDef mat-header-cell>CONEXÃO</th><td *matCellDef="let row" mat-cell>{{ row.ConnectedAtUtc | date:'dd/MM/yyyy HH:mm:ss' }}</td></ng-container>
+      <ng-container matColumnDef="DisconnectedAtUtc"><th *matHeaderCellDef mat-header-cell>DESCONEXÃO</th><td *matCellDef="let row" mat-cell><span [class.online]="!row.DisconnectedAtUtc">{{ row.DisconnectedAtUtc ? (row.DisconnectedAtUtc | date:'dd/MM/yyyy HH:mm:ss') : 'Online agora' }}</span></td></ng-container>
+      <ng-container matColumnDef="duration"><th *matHeaderCellDef mat-header-cell>DURAÇÃO</th><td *matCellDef="let row" mat-cell>{{ duration(row) }}</td></ng-container>
+      <ng-container matColumnDef="IpAddress"><th *matHeaderCellDef mat-header-cell>IP</th><td *matCellDef="let row" mat-cell>{{ row.IpAddress || '-' }}</td></ng-container>
+      <tr *matHeaderRowDef="columns" mat-header-row></tr>
+      <tr *matRowDef="let row; columns: columns" mat-row></tr>
+    </table>
+    @if (history.length === 0) { <p class="empty">Nenhuma conexão registrada.</p> }
+  }
+</mat-dialog-content>
+<mat-dialog-actions align="end"><button mat-button mat-dialog-close>Fechar</button></mat-dialog-actions>

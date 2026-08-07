@@ -1,0 +1,14 @@
+{
+  "id": "com.cnhindustrial.cnhtv",
+  "version": "1.0.0",
+  "vendor": "CNH Industrial",
+  "type": "web",
+  "main": "index.html",
+  "title": "CNH TV",
+  "icon": "icon.png",
+  "largeIcon": "largeIcon.png",
+  "iconColor": "#010000",
+  "backgroundColor": "#010000",
+  "transparent": false,
+  "disableBackHistoryAPI": true
+}

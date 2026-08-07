@@ -1,0 +1,15 @@
+<div class="table-container">
+  <div class="table-wrapper">
+    <table class="table" mat-table [dataSource]="dataSource">
+      <ng-content></ng-content>
+      <tr *matHeaderRowDef="headers; sticky: true" mat-header-row></tr>
+      <tr *matRowDef="let row; columns: headers" mat-row></tr>
+    </table>
+    @if (!loading && dataSource.data.length === 0) {
+      <div class="empty-state">{{ 'table.noData' | translate }}</div>
+    }
+    @if (loading) { <mat-progress-bar mode="indeterminate"></mat-progress-bar> }
+    <mat-paginator class="paginator" showFirstLastButtons [length]="totalItems" [pageSize]="pageSize"
+      [pageSizeOptions]="pageSizeOptions" (page)="pageChange($event)"></mat-paginator>
+  </div>
+</div>

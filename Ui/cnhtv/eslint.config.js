@@ -1,0 +1,167 @@
+const eslint = require('@eslint/js');
+const tseslint = require('typescript-eslint');
+const angular = require('angular-eslint');
+const prettierPlugin = require('eslint-plugin-prettier');
+const prettierConfig = require('eslint-config-prettier');
+
+module.exports = tseslint.config(
+  {
+    files: ['**/*.ts'],
+    extends: [
+      eslint.configs.recommended,
+      ...tseslint.configs.recommended,
+      ...tseslint.configs.stylistic,
+      ...angular.configs.tsRecommended,
+      prettierConfig,
+    ],
+    plugins: {
+      prettier: prettierPlugin,
+    },
+    processor: angular.processInlineTemplates,
+    rules: {
+      // ── Angular rules ───────────────────────────────────────────────
+      '@angular-eslint/component-class-suffix': 'off',
+      '@angular-eslint/component-max-inline-declarations': [
+        'error',
+        { template: 10, styles: 10, animations: 30 },
+      ],
+      '@angular-eslint/component-selector': [
+        'error',
+        { type: 'element', prefix: '', style: 'kebab-case' },
+      ],
+      '@angular-eslint/contextual-decorator': 'error',
+      '@angular-eslint/directive-class-suffix': ['error', { suffixes: ['Directive'] }],
+      '@angular-eslint/directive-selector': [
+        'error',
+        { type: 'attribute', prefix: '', style: 'camelCase' },
+      ],
+      '@angular-eslint/no-conflicting-lifecycle': 'error',
+      '@angular-eslint/no-empty-lifecycle-method': 'error',
+      '@angular-eslint/no-lifecycle-call': 'error',
+      '@angular-eslint/relative-url-prefix': 'error',
+      '@angular-eslint/sort-lifecycle-methods': 'error',
+      '@angular-eslint/use-lifecycle-interface': 'error',
+      '@angular-eslint/use-pipe-transform-interface': 'error',
+      '@angular-eslint/no-output-on-prefix': 'off',
+      '@angular-eslint/no-host-metadata-property': 'off',
+
+      // ── TypeScript rules ───────────────────────────────────────────────
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/class-literal-property-style': 'error',
+      '@typescript-eslint/consistent-generic-constructors': 'error',
+      '@typescript-eslint/consistent-indexed-object-style': 'error',
+      '@typescript-eslint/consistent-type-assertions': 'error',
+      '@typescript-eslint/array-type': ['error', { default: 'array', readonly: 'array' }],
+      '@typescript-eslint/consistent-type-definitions': 'error',
+      '@typescript-eslint/default-param-last': 'error',
+      '@typescript-eslint/explicit-member-accessibility': [
+        'error',
+        { overrides: { constructors: 'off' } },
+      ],
+      '@typescript-eslint/init-declarations': 'error',
+      '@typescript-eslint/no-unused-vars': 'error',
+      '@typescript-eslint/member-ordering': [
+        'error',
+        {
+          default: [
+            'private-readonly-field',
+            'private-field',
+            'protected-readonly-field',
+            'protected-field',
+            'public-readonly-field',
+            'public-field',
+            'constructor',
+            'public-get',
+            'public-set',
+            'protected-get',
+            'protected-set',
+            'private-get',
+            'private-set',
+            'public-method',
+            'protected-method',
+            'private-method',
+          ],
+        },
+      ],
+      '@typescript-eslint/method-signature-style': 'error',
+      '@typescript-eslint/no-confusing-non-null-assertion': 'error',
+      '@typescript-eslint/no-dynamic-delete': 'error',
+      '@typescript-eslint/no-empty-function': 'error',
+      '@typescript-eslint/no-empty-interface': 'error',
+      '@typescript-eslint/no-import-type-side-effects': 'error',
+      '@typescript-eslint/no-inferrable-types': [
+        'error',
+        { ignoreParameters: true, ignoreProperties: true },
+      ],
+      '@typescript-eslint/no-invalid-void-type': 'error',
+      '@typescript-eslint/no-loop-func': 'error',
+      '@typescript-eslint/no-non-null-asserted-nullish-coalescing': 'error',
+      '@typescript-eslint/no-unused-expressions': 'error',
+      '@typescript-eslint/no-useless-constructor': 'error',
+      '@typescript-eslint/no-useless-empty-export': 'error',
+      '@typescript-eslint/no-var-requires': 'off',
+      '@typescript-eslint/prefer-enum-initializers': 'error',
+      '@typescript-eslint/prefer-function-type': 'error',
+      '@typescript-eslint/prefer-literal-enum-member': 'error',
+      '@typescript-eslint/unified-signatures': 'off',
+      '@angular-eslint/prefer-inject': 'off',
+
+      // ── Other core rules ─────────────────────────────────────────────────
+      'array-callback-return': 'error',
+      'default-param-last': 'off',
+      'dot-notation': 'off',
+      'no-await-in-loop': 'error',
+      'no-console': ['error', { allow: ['warn', 'error', 'groupCollapsed', 'groupEnd'] }],
+      'no-constant-binary-expression': 'error',
+      'no-constructor-return': 'error',
+      'no-duplicate-imports': 'error',
+      'no-new-native-nonconstructor': 'error',
+      'no-promise-executor-return': 'error',
+      'no-self-compare': 'error',
+      'no-template-curly-in-string': 'error',
+      'no-unmodified-loop-condition': 'error',
+      'no-unused-private-class-members': 'error',
+      'no-unreachable-loop': 'error',
+      'no-empty-function': 'off',
+      'no-loop-func': 'off',
+      'no-unused-expressions': 'off',
+      'no-useless-constructor': 'off',
+      'require-atomic-updates': 'error',
+      'init-declarations': 'off',
+      camelcase: ['error', { ignoreImports: true }],
+      'accessor-pairs': 'error',
+      'prettier/prettier': [
+        'error',
+        {
+          endOfLine: 'auto',
+        },
+      ],
+    },
+  },
+  {
+    files: ['**/*.html'],
+    extends: [...angular.configs.templateRecommended, ...angular.configs.templateAccessibility],
+    rules: {
+      '@angular-eslint/template/attributes-order': [
+        'error',
+        {
+          order: [
+            'STRUCTURAL_DIRECTIVE',
+            'ATTRIBUTE_BINDING',
+            'INPUT_BINDING',
+            'TWO_WAY_BINDING',
+            'OUTPUT_BINDING',
+            'TEMPLATE_REFERENCE',
+          ],
+        },
+      ],
+      '@angular-eslint/template/label-has-associated-control': 'off',
+      '@angular-eslint/template/banana-in-box': 'error',
+      '@angular-eslint/template/conditional-complexity': 'error',
+      '@angular-eslint/template/no-any': 'warn',
+      '@angular-eslint/template/no-duplicate-attributes': 'error',
+      '@angular-eslint/template/no-inline-styles': 'off',
+      '@angular-eslint/template/no-negated-async': 'error',
+    },
+  },
+);

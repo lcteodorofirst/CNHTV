@@ -1,0 +1,22 @@
+<div class="app-shell" [class.nav-collapsed]="collapsed()">
+  <aside class="side-nav">
+    <div class="brand-area">
+      <img src="/assets/images/cnh.png" alt="CNH">
+      <span>CNH TV</span>
+    </div>
+    <nav aria-label="Navegação principal">
+      @for (item of routes; track item.route) {
+        <a routerLinkActive="active" [routerLink]="['/', item.route]">
+          <mat-icon>{{ item.icon }}</mat-icon><span>{{ item.label | translate }}</span>
+        </a>
+      }
+    </nav>
+    <div class="nav-footer">Manufacturing IT</div>
+  </aside>
+  <header class="top-bar">
+    <button mat-icon-button aria-label="Alternar menu" (click)="toggleNavigation()"><mat-icon>menu</mat-icon></button>
+    <div><strong>CNH TV</strong><small>Gestão de displays industriais</small></div>
+    <span class="environment">CURITIBA</span>
+  </header>
+  <main class="main-content"><router-outlet></router-outlet></main>
+</div>

@@ -1,0 +1,24 @@
+{
+  "home": "Página Inicial",
+  "welcome-text": "Acompanhe o estado dos displays e mantenha cada apresentação sob controle.",
+  "tv": {
+    "menu": "TVs",
+    "list-title": "Monitoramento de TVs"
+  },
+  "table": {
+    "noData": "Nenhum dado encontrado",
+    "actions": "Ações"
+  },
+  "dialog": {
+    "cancel": "Cancelar",
+    "save": "Salvar",
+    "edit": "Editar",
+    "add": "Adicionar"
+  },
+  "delete": {
+    "areYouSure": "Você tem certeza?",
+    "permanentDeleteWarning": "Isso irá deletar permanentemente a entidade selecionada",
+    "confirm": "Sim, deletar",
+    "cancel": "Cancelar"
+  }
+}

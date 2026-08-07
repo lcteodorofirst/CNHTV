@@ -1,0 +1,194 @@
+trigger:
+  branches:
+    include:
+      - main
+      - release/*
+
+pr:
+  branches:
+    include:
+      - '*'
+
+pool:
+  vmImage: ubuntu-latest
+  
+  
+name: $(version)
+
+variables:
+  ${{ if endsWith(variables['Build.SourceBranch'], 'release/v8') }}:
+    isReleaseVersion: true
+    major: 8
+    minor: 2
+  ${{ else }}: 
+    isReleaseVersion: false
+    major: 0
+    minor: 0
+    branchName: $[replace(variables['Build.SourceBranch'], 'refs/heads/', '')]
+
+  patch: $[counter(format('{0}.{1}', variables['major'], variables['minor']), 0)]
+
+  ${{ if ne(variables['branchName'], '') }}:
+    version: $[format('{0}.{1}.{2}-{3}', variables['major'], variables['minor'], variables['patch'], variables['branchName'])]
+  ${{ else }}:
+    version: $[format('{0}.{1}.{2}', variables['major'], variables['minor'], variables['patch'])]
+
+stages:
+
+- stage: 'CodeAnalysisBuild'
+  displayName: 'Code Analysis and Build'
+  jobs:
+  - job: 'CodeAnalysisBuild'
+    displayName: 'Code Analysis and Build'
+    steps:
+      - task: SonarQubePrepare@7
+        inputs:
+          SonarQube: 'PS Sonar Enterprise'
+          scannerMode: 'dotnet'
+          projectKey: 'com.cnh.ps.bdo-la.template-netapi'
+          projectName: 'com.cnh.ps.bdo-la.template-netapi'
+          extraProperties: |
+            # Additional properties that will be passed to the scanner, 
+            # Put one key=value per line, example:
+            sonar.exclusions=**\wwwroot\**,**\TrackerUI\**
+            sonar.cs.opencover.reportsPaths="**\coverage.opencover.xml"
+      - task: DotNetCoreCLI@2
+        name: Restore
+        inputs:
+          command: 'restore'
+          projects: |
+            projects/Cnhtv/**/*.sln
+            libs/Blober/**/*.csproj
+            libs/Broker/**/*.csproj
+            libs/Infra/**/*.csproj
+            libs/Tracker/**/*.csproj
+            libs/Utils/**/*.csproj
+            !libs/Infra/Infra.FluentValidation/**/*.csproj
+            !libs/**/TestApi/**/*.csproj
+            !libs/**/TestApi31/**/*.csproj
+            !libs/**/UnitTests/**/*.csproj
+            !libs/**/Example/**/*.csproj
+            !libs/**/IntegrationTests/**/*.csproj
+          feedsToUse: 'select'
+          vstsFeed: '0c711aaa-7c42-4325-b208-e40733d5a874/d2a66d04-c20a-47a7-a3cf-d3b2a394c857'
+      - task: DotNetCoreCLI@2
+        name: Build
+        inputs:
+          command: 'build'
+          projects: |
+            projects/Cnhtv/**/*.sln
+            libs/Blober/**/*.csproj
+            libs/Broker/**/*.csproj
+            libs/Infra/**/*.csproj
+            libs/Tracker/**/*.csproj
+            libs/Utils/**/*.csproj
+            !libs/Infra/Infra.FluentValidation/**/*.csproj
+            !libs/**/TestApi/**/*.csproj
+            !libs/**/TestApi31/**/*.csproj
+            !libs/**/UnitTests/**/*.csproj
+            !libs/**/Example/**/*.csproj
+            !libs/**/IntegrationTests/**/*.csproj        
+          arguments: '-c release --no-restore'
+      - task: DotNetCoreCLI@2
+        name: Tests
+        inputs:
+          command: 'test'
+          arguments: '--no-restore /p:CollectCoverage=true /p:CoverletOutputFormat=opencover'
+          projects: |
+            projects/Cnhtv/Tests/**/*.csproj
+#            ./libs/**/Tests/**/*.csproj
+      - task: SonarQubeAnalyze@7
+        inputs:
+          jdkversion: 'JAVA_HOME_17_X64'
+      - task: SonarQubePublish@7
+        inputs:
+          pollingTimeoutSec: '300'
+
+- stage: 'Pack'
+  condition: and(succeeded('CodeAnalysisBuild'), eq(variables.isReleaseVersion, true))
+  displayName: 'Pack libs'
+  jobs:
+  - job: 'PackLibs'
+    displayName: 'Pack libs job'
+    steps:
+      - task: DotNetCoreCLI@2
+        name: Restore
+        inputs:
+          command: 'restore'
+          projects: |
+            libs/Blober/**/*.csproj
+            libs/Broker/**/*.csproj
+            libs/Infra/**/*.csproj
+            libs/Tracker/**/*.csproj
+            libs/Utils/**/*.csproj
+            !libs/Infra/Infra.FluentValidation/**/*.csproj
+            !libs/**/TestApi/**/*.csproj
+            !libs/**/TestApi31/**/*.csproj
+            !libs/**/UnitTests/**/*.csproj
+            !libs/**/Example/**/*.csproj
+            !libs/**/IntegrationTests/**/*.csproj
+          feedsToUse: 'select'
+          vstsFeed: '0c711aaa-7c42-4325-b208-e40733d5a874/d2a66d04-c20a-47a7-a3cf-d3b2a394c857'
+      - task: DotNetCoreCLI@2
+        name: 'Pack'
+        inputs:
+          command: 'custom'
+          custom: 'pack'
+          arguments: '--output $(Build.ArtifactStagingDirectory)/libs --no-restore --no-restore --include-symbols --include-source /p:PackageVersion=$(version)'
+          projects: |
+            libs/Blober/**/*.csproj
+            libs/Broker/**/*.csproj
+            libs/Infra/**/*.csproj
+            libs/Tracker/**/*.csproj
+            libs/Utils/**/*.csproj
+            !libs/Infra/Infra.FluentValidation/**/*.csproj
+            !libs/**/TestApi/**/*.csproj
+            !libs/**/TestApi31/**/*.csproj
+            !libs/**/UnitTests/**/*.csproj
+            !libs/**/Example/**/*.csproj
+            !libs/**/IntegrationTests/**/*.csproj
+      - task: PublishPipelineArtifact@1
+        displayName: 'Publish libs artifact'
+        inputs:
+          targetPath: '$(Build.ArtifactStagingDirectory)/libs'
+          artifact: 'libs'
+
+- stage: 'PublishLibs'
+  condition: and(succeeded('CodeAnalysisBuild'), and(succeeded('Pack'), eq(variables.isReleaseVersion, true)))
+  displayName: 'Publish libs'
+  jobs:
+  - job: 'PublishLibs'
+    displayName: 'Publish libs job'
+    steps:
+      - task: DownloadPipelineArtifact@2
+        displayName: 'Download libs artifact'
+        inputs:
+          artifact: 'libs'
+          targetPath: './nupkgs'
+      - script: |
+          ls
+        displayName: "Use Folder in Deploy Stage"
+      - task: DotNetCoreCLI@2
+        name: 'Push'
+        inputs:
+          command: 'push'
+          packagesToPush: './nupkgs/*.nupkg'
+          nuGetFeedType: 'internal'
+          publishVstsFeed: '0c711aaa-7c42-4325-b208-e40733d5a874/d2a66d04-c20a-47a7-a3cf-d3b2a394c857'
+
+- stage: Tag
+  dependsOn: PublishLibs
+  condition: and(succeeded('PublishLibs'), eq(variables.isReleaseVersion, true))
+  jobs:
+  - job: TagJob
+    steps:
+    - checkout: self
+      clean: true
+      persistCredentials: true
+    - script: |
+        echo "Creating tag for version $(version)"
+        git config user.name "Azure DevOps"
+        git config user.email "noreply@azuredevops.com"
+        git tag -a "$(version)" -m "Tagging version $(version)"
+        git push origin "$(version)"
+      displayName: "Add Git Tag"

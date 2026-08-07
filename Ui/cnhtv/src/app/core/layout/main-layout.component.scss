@@ -1,0 +1,22 @@
+:host { display: block; height: 100%; }
+.app-shell { height: 100%; display: grid; grid-template-columns: 15.625rem 1fr; grid-template-rows: 4.25rem 1fr; transition: grid-template-columns .25s ease; }
+.side-nav { grid-row: 1 / 3; background: #202020; color: #fff; display: flex; flex-direction: column; overflow: hidden; box-shadow: .25rem 0 1rem rgba(0,0,0,.18); z-index: 3; }
+.brand-area { min-height: 4.25rem; display: flex; align-items: center; gap: .75rem; padding: .65rem 1rem; border-bottom: 1px solid #3d3d3d; font-weight: 700; white-space: nowrap; }
+.brand-area img { width: 6.2rem; height: 2.7rem; object-fit: contain; background: transparent; padding: 0; }
+nav { padding: 1rem .75rem; display: flex; flex-direction: column; gap: .4rem; }
+nav a { min-height: 3rem; color: #e9e9e9; text-decoration: none; display: flex; align-items: center; gap: .9rem; padding: 0 .85rem; border-left: .25rem solid transparent; white-space: nowrap; }
+nav a:hover { background: #303030; }
+nav a.active { color: white; background: #353535; border-left-color: var(--primary); }
+.nav-footer { margin-top: auto; padding: 1rem; color: #a8a8a8; font-size: .75rem; white-space: nowrap; }
+.top-bar { grid-column: 2; display: flex; align-items: center; gap: .8rem; padding: 0 1.25rem; background: #fff; border-bottom: 1px solid #ddd; box-shadow: 0 .1rem .4rem rgba(0,0,0,.08); z-index: 2; }
+.top-bar div { display: flex; flex-direction: column; }
+.top-bar small { color: #6b6b6b; }
+.environment { margin-left: auto; padding: .35rem .65rem; background: #f1f1f1; border-left: .2rem solid var(--primary); font-size: .75rem; font-weight: 700; }
+.main-content { grid-column: 2; min-width: 0; min-height: 0; overflow: hidden; background: var(--background); }
+.nav-collapsed { grid-template-columns: 4.25rem 1fr; }
+.nav-collapsed .brand-area { padding-inline: .55rem; }
+.nav-collapsed .brand-area img { width: 3.1rem; }
+.nav-collapsed .brand-area span, .nav-collapsed nav span, .nav-collapsed .nav-footer { display: none; }
+.nav-collapsed nav { padding-inline: .45rem; }
+.nav-collapsed nav a { justify-content: center; padding: 0; }
+@media (max-width: 720px) { .app-shell { grid-template-columns: 4.25rem 1fr; } .brand-area span, nav span, .nav-footer { display: none; } .brand-area { padding-inline: .55rem; } .brand-area img { width: 3.1rem; } nav a { justify-content: center; padding: 0; } }

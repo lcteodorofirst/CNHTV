@@ -1,0 +1,24 @@
+<page-header [title]="'home' | translate"></page-header>
+
+<div class="dashboard">
+  <p class="intro">{{ 'welcome-text' | translate }}</p>
+  <div class="cards">
+    <article class="metric total"><mat-icon>tv</mat-icon><div><strong>{{ devices.length }}</strong><span>TVs cadastradas</span></div></article>
+    <article class="metric online"><mat-icon>check_circle</mat-icon><div><strong>{{ online }}</strong><span>Online</span></div></article>
+    <article class="metric offline"><mat-icon>error_outline</mat-icon><div><strong>{{ offline }}</strong><span>Offline</span></div></article>
+  </div>
+  <section class="recent">
+    <div class="section-title"><h2>Últimos contatos</h2><button mat-icon-button (click)="load()"><mat-icon>refresh</mat-icon></button></div>
+    @for (device of lastContacts; track device.Id) {
+      <div class="device-row">
+        <span class="dot" [class.is-online]="device.IsOnline"></span>
+        <div><strong>{{ device.Name }}</strong><small>{{ device.PresentationUrl }}</small></div>
+        <span class="state">{{ device.IsOnline ? 'Online' : 'Offline' }}</span>
+      </div>
+    }
+    @if (!loading && devices.length === 0) {
+      <div class="empty">Aguardando a primeira TV se conectar.</div>
+    }
+  </section>
+</div>
+<img class="dev-image" alt="" src="/assets/images/dev.png"/>
